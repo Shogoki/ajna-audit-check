@@ -9,6 +9,27 @@ library Maths {
         return x >= 0 ? x : -x;
     }
 
+    /**
+     * @notice Returns the square root of a WAD, as a WAD.
+     * @dev Utilizes the babylonian method: https://en.wikipedia.org/wiki/Methods_of_computing_square_roots#Babylonian_method.
+     * @param y The WAD to take the square root of.
+     * @return z The square root of the WAD, as a WAD.
+     */
+    function wsqrt(uint256 y) internal pure returns (uint256 z) {
+        if (y > 3) {
+            z = y;
+            uint256 x = y / 2 + 1;
+            while (x < z) {
+                z = x;
+                x = (y / x + x) / 2;
+            }
+        } else if (y != 0) {
+            z = 1;
+        }
+        // convert z to a WAD
+        z = z * 10**9;
+    }
+
     function wmul(uint256 x, uint256 y) internal pure returns (uint256) {
         return (x * y + 10**18 / 2) / 10**18;
     }
@@ -19,10 +40,6 @@ library Maths {
 
     function min(uint256 x, uint256 y) internal pure returns (uint256) {
         return x <= y ? x : y;
-    }
-
-    function wad(uint256 x) internal pure returns (uint256) {
-        return x * 10**18;
     }
 
     /** @notice Raises a WAD to the power of an integer and returns a WAD */
@@ -37,4 +54,5 @@ library Maths {
             }
         }
     }
+
 }
